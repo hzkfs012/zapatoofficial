@@ -32,14 +32,14 @@ const Navbar: React.FC = () => {
   return (
     <nav 
       className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled ? "py-2 bg-white shadow-md" : "py-4 bg-transparent"
+        isScrolled ? "py-2 bg-white shadow-md" : "py-4 bg-navy/80 backdrop-blur-sm"
       }`}
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <Link to="home" spy={true} smooth={true} duration={500} className="cursor-pointer">
-              <h1 className="text-xl md:text-2xl font-bold text-navy">
+              <h1 className={`text-xl md:text-2xl font-bold ${isScrolled ? 'text-navy' : 'text-white'}`}>
                 Zapato <span className="text-electric-green">Laundaria.co</span>
               </h1>
             </Link>
@@ -55,7 +55,7 @@ const Navbar: React.FC = () => {
                 smooth={true}
                 offset={-70}
                 duration={500}
-                className="text-navy hover:text-electric-green font-medium cursor-pointer transition-colors"
+                className={`${isScrolled ? 'text-navy' : 'text-white'} hover:text-electric-green font-medium cursor-pointer transition-colors`}
               >
                 {link.name}
               </Link>
@@ -64,7 +64,7 @@ const Navbar: React.FC = () => {
 
           {/* Mobile Navigation Toggle */}
           <div className="md:hidden">
-            <button onClick={() => setIsOpen(!isOpen)} className="text-navy">
+            <button onClick={() => setIsOpen(!isOpen)} className={`${isScrolled ? 'text-navy' : 'text-white'}`}>
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
