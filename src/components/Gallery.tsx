@@ -87,7 +87,7 @@ const Gallery: React.FC = () => {
         
         <div className="mt-12 text-center">
           <a 
-            href="https://www.instagram.com/zapatolaundry" 
+            href="https://www.instagram.com/zapatolaundry.co" 
             target="_blank" 
             rel="noopener noreferrer"
             className="btn-secondary inline-flex items-center gap-2"
