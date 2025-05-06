@@ -51,12 +51,12 @@ const Contact: React.FC = () => {
                   <h3 className="font-bold mb-1">Instagram</h3>
                   <p className="text-white/80">
                     <a 
-                      href="https://www.instagram.com/zapatolaundry" 
+                      href="https://www.instagram.com/zapatolaundry.co" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="hover:text-electric-green transition-colors"
                     >
-                      @zapatolaundry
+                      @zapatolaundry.co
                     </a>
                   </p>
                 </div>
