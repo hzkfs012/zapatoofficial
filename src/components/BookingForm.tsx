@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const BookingForm: React.FC = () => {
   const [name, setName] = useState('');
@@ -20,36 +21,59 @@ const BookingForm: React.FC = () => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [time, setTime] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState('drop-off');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     // Validate form
     if (!name || !email || !phone || !service || !date || !time) {
       toast.error("Please fill in all required fields");
       return;
     }
 
-    // Mock submission
-    console.log({
-      name,
-      email,
-      phone,
-      service,
-      date,
-      time,
-      deliveryMethod
-    });
-
-    toast.success("Booking request submitted! We'll confirm shortly.");
-    
-    // Reset form
-    setName('');
-    setEmail('');
-    setPhone('');
-    setService('');
-    setDate(undefined);
-    setTime('');
-    setDeliveryMethod('drop-off');
+    try {
+      setIsSubmitting(true);
+      
+      // Format the date and time info for the message
+      const formattedDate = date ? format(date, 'PPP') : '';
+      const message = `Booking for ${service} on ${formattedDate} at ${time}. Delivery method: ${deliveryMethod}.`;
+      
+      // Save to Supabase
+      const { data, error } = await supabase
+        .from('booking_requests')
+        .insert([
+          { 
+            name, 
+            email, 
+            phone, 
+            service,
+            message
+          }
+        ]);
+        
+      if (error) {
+        console.error("Error submitting booking:", error);
+        toast.error("Failed to submit booking. Please try again.");
+        return;
+      }
+      
+      toast.success("Booking request submitted! We'll confirm shortly.");
+      
+      // Reset form
+      setName('');
+      setEmail('');
+      setPhone('');
+      setService('');
+      setDate(undefined);
+      setTime('');
+      setDeliveryMethod('drop-off');
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      toast.error("Something went wrong. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const timeSlots = [
@@ -263,8 +287,9 @@ const BookingForm: React.FC = () => {
                 <button 
                   type="submit" 
                   className="w-full btn-primary"
+                  disabled={isSubmitting}
                 >
-                  Book Appointment
+                  {isSubmitting ? 'Submitting...' : 'Book Appointment'}
                 </button>
               </div>
             </form>
