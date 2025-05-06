@@ -12,6 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const BookingForm: React.FC = () => {
   const [name, setName] = useState('');
@@ -22,6 +23,7 @@ const BookingForm: React.FC = () => {
   const [time, setTime] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState('drop-off');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isMobile = useIsMobile();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,9 +84,9 @@ const BookingForm: React.FC = () => {
   ];
 
   return (
-    <section id="booking" className="py-20 bg-white">
+    <section id="booking" className="py-12 md:py-20 bg-white">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="flex flex-col lg:flex-row gap-12">
+        <div className="flex flex-col lg:flex-row gap-8 md:gap-12">
           <div className="lg:w-2/5">
             <h2 className="section-heading">Book Your Service</h2>
             <p className="text-gray-600 mb-6">
@@ -116,8 +118,8 @@ const BookingForm: React.FC = () => {
           </div>
           
           <div className="lg:w-3/5">
-            <form onSubmit={handleSubmit} className="bg-gray-50 p-6 rounded-xl shadow-sm">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form onSubmit={handleSubmit} className="bg-gray-50 p-4 md:p-6 rounded-xl shadow-sm">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <div className="col-span-1">
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                     Full Name*
@@ -199,7 +201,7 @@ const BookingForm: React.FC = () => {
                         {date ? format(date, "PPP") : <span>Pick a date</span>}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
+                    <PopoverContent className={cn("w-auto p-0", isMobile ? "w-[280px]" : "")} align="start">
                       <Calendar
                         mode="single"
                         selected={date}
@@ -239,7 +241,7 @@ const BookingForm: React.FC = () => {
                   </label>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <div 
-                      className={`flex-1 border rounded-lg p-4 cursor-pointer transition-all ${
+                      className={`flex-1 border rounded-lg p-3 md:p-4 cursor-pointer transition-all ${
                         deliveryMethod === 'drop-off' 
                           ? 'border-electric-green bg-electric-green/10' 
                           : 'border-gray-300 hover:border-electric-green/50'
@@ -260,7 +262,7 @@ const BookingForm: React.FC = () => {
                     </div>
                     
                     <div 
-                      className={`flex-1 border rounded-lg p-4 cursor-pointer transition-all ${
+                      className={`flex-1 border rounded-lg p-3 md:p-4 cursor-pointer transition-all ${
                         deliveryMethod === 'pick-up' 
                           ? 'border-electric-green bg-electric-green/10' 
                           : 'border-gray-300 hover:border-electric-green/50'
@@ -283,7 +285,7 @@ const BookingForm: React.FC = () => {
                 </div>
               </div>
               
-              <div className="mt-8">
+              <div className="mt-6 md:mt-8">
                 <button 
                   type="submit" 
                   className="w-full btn-primary"
