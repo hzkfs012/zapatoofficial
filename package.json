@@ -83,6 +83,6 @@
     "vite": "^6.3.5"
   },
   "resolutions": {
-    "vite": "^6.3.5"
+    "esbuild": "0.25.4"
   }
 }
