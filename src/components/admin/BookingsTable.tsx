@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import {
@@ -15,6 +16,10 @@ import { EditBookingForm } from './EditBookingForm';
 import { Database } from '@/integrations/supabase/types';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { InvoiceTemplate } from './InvoiceTemplate';
+import { Printer } from 'lucide-react';
 
 type Booking = Database['public']['Tables']['booking_requests']['Row'];
 
@@ -43,6 +48,8 @@ export const BookingsTable = () => {
 
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+    const [printingBooking, setPrintingBooking] = useState<Booking | null>(null);
+    const invoiceRef = useRef<HTMLDivElement>(null);
 
     if (isLoading) return <div>Loading bookings...</div>;
     if (error) return <div>Error loading bookings: {(error as Error).message}</div>;
@@ -54,6 +61,45 @@ export const BookingsTable = () => {
     const handleEditClick = (booking: Booking) => {
         setSelectedBooking(booking);
         setIsEditDialogOpen(true);
+    };
+
+    const handlePrintInvoice = async (booking: Booking) => {
+        setPrintingBooking(booking);
+        toast.info('Generating invoice...');
+
+        setTimeout(async () => {
+            if (invoiceRef.current) {
+                try {
+                    const canvas = await html2canvas(invoiceRef.current, { scale: 2 });
+                    const imgData = canvas.toDataURL('image/png');
+                    
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+                    
+                    const imgProps= pdf.getImageProperties(imgData);
+                    const pdfImageRatio = imgProps.width / imgProps.height;
+                    const pdfPageRatio = pdfWidth / pdfHeight;
+
+                    let newWidth = pdfWidth;
+                    let newHeight = newWidth / pdfImageRatio;
+                    
+                    if(pdfImageRatio > pdfPageRatio) {
+                        newHeight = pdfHeight;
+                        newWidth = newHeight * pdfImageRatio;
+                    }
+
+                    pdf.addImage(imgData, 'PNG', 0, 0, newWidth, newHeight);
+                    pdf.save(`invoice-${booking.id.slice(0, 8)}.pdf`);
+                    toast.success('Invoice downloaded.');
+                } catch (error) {
+                    toast.error('Failed to generate invoice.');
+                    console.error(error);
+                } finally {
+                    setPrintingBooking(null);
+                }
+            }
+        }, 100);
     };
 
     return (
@@ -91,8 +137,14 @@ export const BookingsTable = () => {
                                     : 'N/A'}
                                 </TableCell>
                                 <TableCell>{new Date(booking.created_at).toLocaleDateString()}</TableCell>
-                                <TableCell className="text-right">
+                                <TableCell className="text-right space-x-2">
                                     <Button variant="outline" size="sm" onClick={() => handleEditClick(booking)}>Edit</Button>
+                                    {booking.payment_status === 'paid' && (
+                                        <Button variant="outline" size="sm" onClick={() => handlePrintInvoice(booking)}>
+                                            <Printer className="mr-2 h-4 w-4" />
+                                            Invoice
+                                        </Button>
+                                    )}
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -116,6 +168,10 @@ export const BookingsTable = () => {
                 >
                     Next
                 </Button>
+            </div>
+
+            <div className="absolute -z-10 -left-[9999px] top-0">
+              {printingBooking && <InvoiceTemplate booking={printingBooking} invoiceRef={invoiceRef} />}
             </div>
 
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
