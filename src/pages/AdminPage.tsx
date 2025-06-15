@@ -2,6 +2,8 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
+import { BookingsTable } from '@/components/admin/BookingsTable';
+import { DashboardStats } from '@/components/admin/DashboardStats';
 
 const AdminPage = () => {
   const { signOut, user } = useAuth();
@@ -15,10 +17,12 @@ const AdminPage = () => {
         </div>
         <Button onClick={signOut} variant="outline">Logout</Button>
       </header>
-      <main>
-        <p className="p-4 border-2 border-dashed rounded-lg text-center text-muted-foreground">
-          Booking management dashboard and table will be added here soon.
-        </p>
+      <main className="space-y-8">
+        <DashboardStats />
+        <div>
+            <h2 className="text-2xl font-bold tracking-tight mb-4">All Bookings</h2>
+            <BookingsTable />
+        </div>
       </main>
     </div>
   );

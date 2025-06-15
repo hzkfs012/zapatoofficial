@@ -65,7 +65,7 @@ const Navbar: React.FC = () => {
               to="/login"
               className={`${isScrolled ? 'text-navy' : 'text-white'} hover:text-electric-green font-medium cursor-pointer transition-colors`}
             >
-              Admin Login
+              Login
             </RouterLink>
           </div>
 
@@ -100,7 +100,7 @@ const Navbar: React.FC = () => {
                 className="text-navy hover:text-electric-green font-medium py-2 cursor-pointer transition-colors"
                 onClick={() => setIsOpen(false)}
               >
-                Admin Login
+                Login
               </RouterLink>
             </div>
           </div>
