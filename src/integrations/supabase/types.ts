@@ -16,8 +16,13 @@ export type Database = {
           id: string
           message: string | null
           name: string
+          payment_amount: number | null
+          payment_method: string | null
+          payment_status: Database["public"]["Enums"]["payment_status"]
           phone: string | null
           service: string
+          status: Database["public"]["Enums"]["booking_status"]
+          updated_at: string | null
         }
         Insert: {
           created_at?: string
@@ -25,8 +30,13 @@ export type Database = {
           id?: string
           message?: string | null
           name: string
+          payment_amount?: number | null
+          payment_method?: string | null
+          payment_status?: Database["public"]["Enums"]["payment_status"]
           phone?: string | null
           service: string
+          status?: Database["public"]["Enums"]["booking_status"]
+          updated_at?: string | null
         }
         Update: {
           created_at?: string
@@ -34,8 +44,13 @@ export type Database = {
           id?: string
           message?: string | null
           name?: string
+          payment_amount?: number | null
+          payment_method?: string | null
+          payment_status?: Database["public"]["Enums"]["payment_status"]
           phone?: string | null
           service?: string
+          status?: Database["public"]["Enums"]["booking_status"]
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -47,7 +62,13 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      booking_status:
+        | "pending"
+        | "confirmed"
+        | "in_progress"
+        | "completed"
+        | "cancelled"
+      payment_status: "unpaid" | "paid"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -162,6 +183,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      booking_status: [
+        "pending",
+        "confirmed",
+        "in_progress",
+        "completed",
+        "cancelled",
+      ],
+      payment_status: ["unpaid", "paid"],
+    },
   },
 } as const
