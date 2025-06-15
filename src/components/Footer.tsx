@@ -54,7 +54,7 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-lg font-bold mb-4">Contact Us</h4>
             <ul className="space-y-2">
-              <li className="text-white/70">Phone: (623) 500-3079</li>
+              <li className="text-white/70">Phone: (+91)6235003079</li>
               <li className="text-white/70">Email: support@zapatolaundry.com</li>
               <li className="text-white/70">Instagram: @zapatolaundry</li>
               <li className="text-white/70">Website: zapatolaundry.co</li>
