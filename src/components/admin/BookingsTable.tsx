@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -88,7 +87,7 @@ export const BookingsTable = () => {
                                 <TableCell><Badge variant={booking.payment_status === 'paid' ? 'default' : 'secondary'}>{booking.payment_status}</Badge></TableCell>
                                 <TableCell className="text-right">
                                     {booking.payment_amount 
-                                    ? `$${(booking.payment_amount / 100).toFixed(2)}`
+                                    ? `₹${(booking.payment_amount / 100).toFixed(2)}`
                                     : 'N/A'}
                                 </TableCell>
                                 <TableCell>{new Date(booking.created_at).toLocaleDateString()}</TableCell>

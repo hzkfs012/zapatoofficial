@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -78,7 +79,7 @@ export const DashboardStats = () => {
                         <CardTitle className="text-sm font-medium">Revenue</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{isLoading ? '...' : `$${((stats?.totalAmount ?? 0) / 100).toFixed(2)}`}</div>
+                        <div className="text-2xl font-bold">{isLoading ? '...' : `₹${((stats?.totalAmount ?? 0) / 100).toFixed(2)}`}</div>
                     </CardContent>
                 </Card>
             </div>
@@ -103,7 +104,7 @@ export const DashboardStats = () => {
                     data={dailyData}
                     dataKey="revenue"
                     color="hsl(var(--chart-3))"
-                    tickFormatter={(value) => `$${value.toLocaleString()}`}
+                    tickFormatter={(value) => `₹${value.toLocaleString()}`}
                 />
             </div>
         </div>

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -146,7 +145,7 @@ export const EditBookingForm: React.FC<EditBookingFormProps> = ({ booking, onSuc
                     name="payment_amount"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Payment Amount ($)</FormLabel>
+                            <FormLabel>Payment Amount (₹)</FormLabel>
                             <FormControl>
                                 <Input type="number" step="0.01" placeholder="e.g. 50.00" {...field} value={field.value ?? ''} onChange={e => field.onChange(e.target.value === '' ? null : parseFloat(e.target.value))} />
                             </FormControl>
