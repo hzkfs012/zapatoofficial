@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-scroll';
@@ -9,9 +8,17 @@ const Hero: React.FC = () => {
       id="home" 
       className="relative min-h-screen flex items-center pt-16 overflow-hidden bg-navy"
     >
-      {/* Background pattern */}
-      <div className="absolute inset-0 z-0 opacity-10">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1552346154-21d32810aba3?q=80&w=2070')] bg-cover bg-center"></div>
+      {/* Background video */}
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+          src="https://videos.pexels.com/video-files/4496263/4496263-hd.mp4"
+        />
+        <div className="absolute inset-0 bg-navy/70"></div>
       </div>
 
       <div className="container mx-auto px-4 md:px-6 z-10 py-20">
