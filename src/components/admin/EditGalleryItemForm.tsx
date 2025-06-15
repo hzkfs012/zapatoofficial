@@ -38,12 +38,28 @@ export const EditGalleryItemForm: React.FC<EditGalleryItemFormProps> = ({ item, 
   
   const mutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      const { data, error } = item
-        ? await supabase.from('gallery_items').update(values).eq('id', item.id).select().single()
-        : await supabase.from('gallery_items').insert(values).select().single();
-      
-      if (error) throw error;
-      return data;
+      if (item) {
+        // Update existing item
+        const { data, error } = await supabase
+          .from('gallery_items')
+          .update(values)
+          .eq('id', item.id)
+          .select()
+          .single();
+        
+        if (error) throw error;
+        return data;
+      } else {
+        // Create new item
+        const { data, error } = await supabase
+          .from('gallery_items')
+          .insert(values)
+          .select()
+          .single();
+        
+        if (error) throw error;
+        return data;
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['gallery_items'] });
