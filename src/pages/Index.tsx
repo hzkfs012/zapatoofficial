@@ -6,8 +6,7 @@ import Services from '../components/Services';
 import BookingForm from '../components/BookingForm';
 import Gallery from '../components/Gallery';
 // import Testimonials from '../components/Testimonials';
-// import Contact from '../components/Contact';
-import ContactSection from '../components/ContactSection';
+import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 
 const Index: React.FC = () => {
@@ -19,8 +18,7 @@ const Index: React.FC = () => {
       <BookingForm />
       <Gallery />
       {/* <Testimonials /> */}
-      {/* <Contact /> */}
-      <ContactSection />
+      <Contact />
       <Footer />
     </div>
   );
