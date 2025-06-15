@@ -10,11 +10,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { MultiSelectCheckbox, OptionType } from '@/components/ui/multi-select-checkbox';
 
 type Booking = Database['public']['Tables']['booking_requests']['Row'];
 type BookingUpdate = Database['public']['Tables']['booking_requests']['Update'];
 
+const servicesOptions: OptionType[] = [
+    { value: "Standard Clean", label: "Standard Clean" },
+    { value: "Deep Clean", label: "Deep Clean" },
+    { value: "Deluxe Treatment", label: "Deluxe Treatment" },
+    { value: "Protective Coating", label: "Protective Coating" },
+];
+
 const formSchema = z.object({
+  service: z.array(z.string()).min(1, "Please select at least one service."),
   status: z.enum(Constants.public.Enums.booking_status),
   payment_status: z.enum(Constants.public.Enums.payment_status),
   payment_amount: z.coerce.number().positive().optional().nullable(),
@@ -51,6 +60,7 @@ export const EditBookingForm: React.FC<EditBookingFormProps> = ({ booking, onSuc
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
+            service: booking.service || [],
             status: booking.status,
             payment_status: booking.payment_status,
             payment_amount: booking.payment_amount ? booking.payment_amount / 100 : undefined,
@@ -60,6 +70,7 @@ export const EditBookingForm: React.FC<EditBookingFormProps> = ({ booking, onSuc
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         mutation.mutate({ 
+            service: values.service,
             status: values.status,
             payment_status: values.payment_status,
             payment_amount: values.payment_amount ? Math.round(values.payment_amount * 100) : null,
@@ -70,6 +81,24 @@ export const EditBookingForm: React.FC<EditBookingFormProps> = ({ booking, onSuc
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                 <FormField
+                    control={form.control}
+                    name="service"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Services</FormLabel>
+                            <FormControl>
+                                <MultiSelectCheckbox
+                                    options={servicesOptions}
+                                    selected={field.value}
+                                    onChange={field.onChange}
+                                    placeholder="Select services..."
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 <FormField
                     control={form.control}
                     name="status"

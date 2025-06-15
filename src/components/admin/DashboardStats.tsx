@@ -3,51 +3,57 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { DatePicker } from '@/components/ui/date-picker';
-import { format, startOfDay, endOfDay } from 'date-fns';
+import { DateRangePicker } from '@/components/ui/date-range-picker';
+import { subDays, format } from 'date-fns';
+import { DateRange } from 'react-day-picker';
+import { DailyStatsChart } from './DailyStatsChart';
 
-const fetchStatsForDate = async (date: Date) => {
-    const startDate = startOfDay(date).toISOString();
-    const endDate = endOfDay(date).toISOString();
-
-    const { data, error, count } = await supabase
-        .from('booking_requests')
-        .select('*', { count: 'exact' })
-        .gte('created_at', startDate)
-        .lte('created_at', endDate);
-
-    if (error) throw new Error(error.message);
+const fetchStatsForDateRange = async (dateRange: DateRange) => {
+    if (!dateRange.from) {
+        return { daily: [], totals: { totalOrders: 0, completedOrders: 0, totalAmount: 0 } };
+    }
+    const from = format(dateRange.from, 'yyyy-MM-dd');
+    const to = dateRange.to ? format(dateRange.to, 'yyyy-MM-dd') : from;
     
-    const completedOrders = data.filter(d => d.status === 'completed').length;
-    const totalAmount = data.reduce((sum, order) => {
-        if (order.status === 'completed' && order.payment_amount) {
-            return sum + order.payment_amount;
-        }
-        return sum;
-    }, 0);
+    const { data, error } = await supabase
+        .rpc('get_daily_stats_in_range', { start_date: from, end_date: to });
 
-    return {
-        totalOrders: count ?? 0,
-        completedOrders,
-        totalAmount,
-    };
+    if (error) {
+        console.error('Error fetching daily stats:', error);
+        throw new Error(error.message);
+    }
+    
+    const totals = (data || []).reduce((acc, day) => {
+        acc.totalOrders += day.total_orders;
+        acc.completedOrders += day.completed_orders;
+        acc.totalAmount += day.revenue;
+        return acc;
+    }, { totalOrders: 0, completedOrders: 0, totalAmount: 0 });
+
+    return { daily: data || [], totals };
 };
 
 
 export const DashboardStats = () => {
-    const [date, setDate] = useState<Date | undefined>(new Date());
+    const [date, setDate] = useState<DateRange | undefined>({
+        from: subDays(new Date(), 29),
+        to: new Date(),
+    });
     
-    const { data: stats, isLoading } = useQuery({
-        queryKey: ['dashboard-stats', date ? format(date, 'yyyy-MM-dd') : 'today'],
-        queryFn: () => fetchStatsForDate(date || new Date()),
-        enabled: !!date,
+    const { data, isLoading } = useQuery({
+        queryKey: ['dashboard-stats', date],
+        queryFn: () => fetchStatsForDateRange(date!),
+        enabled: !!date?.from,
     });
 
+    const stats = data?.totals;
+    const dailyData = data?.daily ?? [];
+
     return (
-        <div>
+        <div className="space-y-8">
             <div className="flex items-center gap-4 mb-4">
-                <h2 className="text-xl font-semibold">Daily Stats</h2>
-                <DatePicker date={date} setDate={setDate} />
+                <h2 className="text-xl font-semibold">Dashboard Stats</h2>
+                <DateRangePicker date={date} setDate={setDate} />
             </div>
             <div className="grid gap-4 md:grid-cols-3">
                 <Card>
@@ -75,6 +81,7 @@ export const DashboardStats = () => {
                     </CardContent>
                 </Card>
             </div>
+            <DailyStatsChart data={dailyData} />
         </div>
     );
 };

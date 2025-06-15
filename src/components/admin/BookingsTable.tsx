@@ -37,7 +37,7 @@ const fetchBookings = async (page: number) => {
 
 export const BookingsTable = () => {
     const [currentPage, setCurrentPage] = useState(0);
-    const { data, isLoading, error } = useQuery({
+    const { data, isLoading, error, refetch } = useQuery({
         queryKey: ['bookings', currentPage],
         queryFn: () => fetchBookings(currentPage),
     });
@@ -79,7 +79,11 @@ export const BookingsTable = () => {
                                     <div className="font-medium">{booking.name}</div>
                                     <div className="text-sm text-muted-foreground">{booking.email}</div>
                                 </TableCell>
-                                <TableCell>{booking.service}</TableCell>
+                                <TableCell>
+                                    <div className="flex flex-wrap gap-1">
+                                        {booking.service.map(s => <Badge key={s} variant="secondary">{s}</Badge>)}
+                                    </div>
+                                </TableCell>
                                 <TableCell><Badge variant="outline">{booking.status}</Badge></TableCell>
                                 <TableCell><Badge variant={booking.payment_status === 'paid' ? 'default' : 'secondary'}>{booking.payment_status}</Badge></TableCell>
                                 <TableCell className="text-right">
@@ -126,6 +130,7 @@ export const BookingsTable = () => {
                             onSuccess={() => {
                                 setIsEditDialogOpen(false);
                                 toast.success('Booking updated successfully!');
+                                refetch();
                             }}
                         />
                     )}

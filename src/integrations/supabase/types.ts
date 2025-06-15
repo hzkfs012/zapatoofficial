@@ -20,7 +20,7 @@ export type Database = {
           payment_method: string | null
           payment_status: Database["public"]["Enums"]["payment_status"]
           phone: string | null
-          service: string
+          service: string[]
           status: Database["public"]["Enums"]["booking_status"]
           updated_at: string | null
         }
@@ -34,7 +34,7 @@ export type Database = {
           payment_method?: string | null
           payment_status?: Database["public"]["Enums"]["payment_status"]
           phone?: string | null
-          service: string
+          service: string[]
           status?: Database["public"]["Enums"]["booking_status"]
           updated_at?: string | null
         }
@@ -48,7 +48,7 @@ export type Database = {
           payment_method?: string | null
           payment_status?: Database["public"]["Enums"]["payment_status"]
           phone?: string | null
-          service?: string
+          service?: string[]
           status?: Database["public"]["Enums"]["booking_status"]
           updated_at?: string | null
         }
@@ -59,7 +59,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_daily_stats_in_range: {
+        Args: { start_date: string; end_date: string }
+        Returns: {
+          day: string
+          total_orders: number
+          completed_orders: number
+          revenue: number
+        }[]
+      }
     }
     Enums: {
       booking_status:
