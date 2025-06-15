@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link } from 'react-scroll';
@@ -25,6 +26,7 @@ const Navbar: React.FC = () => {
     { name: "Services", to: "services" },
     { name: "Book Now", to: "booking" },
     { name: "Gallery", to: "gallery" },
+    { name: "Testimonials", to: "testimonials" },
     { name: "Contact", to: "contact" },
   ];
 
