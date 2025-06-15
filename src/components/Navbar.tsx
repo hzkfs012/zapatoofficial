@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link } from 'react-scroll';
+import { Link as RouterLink } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,7 +47,7 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-6">
+          <div className="hidden md:flex items-center space-x-6">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
@@ -60,6 +61,12 @@ const Navbar: React.FC = () => {
                 {link.name}
               </Link>
             ))}
+            <RouterLink
+              to="/login"
+              className={`${isScrolled ? 'text-navy' : 'text-white'} hover:text-electric-green font-medium cursor-pointer transition-colors`}
+            >
+              Admin Login
+            </RouterLink>
           </div>
 
           {/* Mobile Navigation Toggle */}
@@ -88,6 +95,13 @@ const Navbar: React.FC = () => {
                   {link.name}
                 </Link>
               ))}
+              <RouterLink
+                to="/login"
+                className="text-navy hover:text-electric-green font-medium py-2 cursor-pointer transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                Admin Login
+              </RouterLink>
             </div>
           </div>
         )}

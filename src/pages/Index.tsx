@@ -5,7 +5,7 @@ import Hero from '../components/Hero';
 import Services from '../components/Services';
 import BookingForm from '../components/BookingForm';
 import Gallery from '../components/Gallery';
-import Testimonials from '../components/Testimonials';
+// import Testimonials from '../components/Testimonials';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 
@@ -17,7 +17,7 @@ const Index: React.FC = () => {
       <Services />
       <BookingForm />
       <Gallery />
-      <Testimonials />
+      {/* <Testimonials /> */}
       <Contact />
       <Footer />
     </div>
