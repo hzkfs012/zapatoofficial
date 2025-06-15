@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { CalendarIcon, Clock } from 'lucide-react';
@@ -48,7 +49,7 @@ const BookingForm: React.FC = () => {
             name, 
             email, 
             phone, 
-            service,
+            service: [service],
             message
           }
         ]);
