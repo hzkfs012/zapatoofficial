@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -16,7 +15,7 @@ import { EditBookingForm } from './EditBookingForm';
 import { Database } from '@/integrations/supabase/types';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
-import { jsPDF } from 'jspdf';
+import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { InvoiceTemplate } from './InvoiceTemplate';
 import { Printer } from 'lucide-react';
