@@ -13,11 +13,16 @@ export const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ booking, invoi
   return (
     <div ref={invoiceRef} className="p-8 bg-white text-black w-[800px]">
       <div className="flex justify-between items-center mb-8 border-b pb-4">
-        <h1 className="text-4xl font-bold text-gray-800">Invoice</h1>
+        <div className="flex items-center space-x-4">
+            <img src="/icons/brush.svg" alt="Shoe Shine Service Logo" className="h-14 w-14" />
+            <div>
+                <h2 className="text-2xl font-semibold">Shoe Shine Service</h2>
+                <p className="text-sm text-gray-600">123 Clean Street, Sparkletown, 110011</p>
+                <p className="text-sm text-gray-600">contact@shoeshine.com</p>
+            </div>
+        </div>
         <div className="text-right">
-          <h2 className="text-2xl font-semibold">Shoe Shine Service</h2>
-          <p className="text-sm text-gray-600">123 Clean Street, Sparkletown, 110011</p>
-          <p className="text-sm text-gray-600">contact@shoeshine.com</p>
+          <h1 className="text-4xl font-bold text-gray-800">Invoice</h1>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4 mb-8">
