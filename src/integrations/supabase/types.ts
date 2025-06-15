@@ -54,18 +54,46 @@ export type Database = {
         }
         Relationships: []
       }
+      expenses: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          description: string | null
+          expense_date: string
+          id: string
+        }
+        Insert: {
+          amount: number
+          category: string
+          created_at?: string
+          description?: string | null
+          expense_date: string
+          id?: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          description?: string | null
+          expense_date?: string
+          id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      get_daily_stats_in_range: {
+      get_daily_dashboard_stats: {
         Args: { start_date: string; end_date: string }
         Returns: {
           day: string
           total_orders: number
           completed_orders: number
           revenue: number
+          expenses: number
         }[]
       }
     }

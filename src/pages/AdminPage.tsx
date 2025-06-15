@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { BookingsTable } from '@/components/admin/BookingsTable';
 import { DashboardStats } from '@/components/admin/DashboardStats';
+import { ExpensesTable } from '@/components/admin/ExpensesTable';
 
 const AdminPage = () => {
   const { signOut, user } = useAuth();
@@ -22,6 +23,9 @@ const AdminPage = () => {
         <div>
             <h2 className="text-2xl font-bold tracking-tight mb-4">All Bookings</h2>
             <BookingsTable />
+        </div>
+        <div>
+            <ExpensesTable />
         </div>
       </main>
     </div>
