@@ -38,11 +38,14 @@ export const EditGalleryItemForm: React.FC<EditGalleryItemFormProps> = ({ item, 
   
   const mutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
+      const { title, before_image_url, after_image_url } = values;
+      const galleryData = { title, before_image_url, after_image_url };
+
       if (item) {
         // Update existing item
         const { data, error } = await supabase
           .from('gallery_items')
-          .update(values)
+          .update(galleryData)
           .eq('id', item.id)
           .select()
           .single();
@@ -53,7 +56,7 @@ export const EditGalleryItemForm: React.FC<EditGalleryItemFormProps> = ({ item, 
         // Create new item
         const { data, error } = await supabase
           .from('gallery_items')
-          .insert(values)
+          .insert(galleryData)
           .select()
           .single();
         
