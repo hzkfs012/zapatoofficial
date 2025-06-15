@@ -1,5 +1,5 @@
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Line } from "recharts"
 import {
   ChartContainer,
   ChartTooltip,
@@ -65,7 +65,7 @@ export const DailyStatsChart = ({ data }: DailyStatsChartProps) => {
                         <ChartLegend content={<ChartLegendContent />} />
                         <Bar yAxisId="left" dataKey="total_orders" fill="var(--color-total_orders)" />
                         <Bar yAxisId="left" dataKey="completed_orders" fill="var(--color-completed_orders)" />
-                        <Bar yAxisId="right" dataKey="revenue" fill="var(--color-revenue)" />
+                        <Line yAxisId="right" dataKey="revenue" type="monotone" stroke="var(--color-revenue)" strokeWidth={2} dot={false} />
                     </BarChart>
                 </ChartContainer>
             </CardContent>
