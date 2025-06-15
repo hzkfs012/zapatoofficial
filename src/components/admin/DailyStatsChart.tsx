@@ -1,5 +1,5 @@
 
-import { Line, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts"
 import {
   ChartContainer,
   ChartTooltip,
@@ -51,7 +51,7 @@ export const DailyStatsChart = ({ data }: DailyStatsChartProps) => {
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig} className="h-[300px] w-full">
-                    <LineChart data={formattedData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+                    <BarChart data={formattedData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
                         <CartesianGrid vertical={false} />
                         <XAxis
                             dataKey="day"
@@ -63,10 +63,10 @@ export const DailyStatsChart = ({ data }: DailyStatsChartProps) => {
                         <YAxis yAxisId="right" orientation="right" stroke="hsl(var(--chart-3))" />
                         <ChartTooltip content={<ChartTooltipContent />} />
                         <ChartLegend content={<ChartLegendContent />} />
-                        <Line yAxisId="left" dataKey="total_orders" type="monotone" stroke="var(--color-total_orders)" strokeWidth={2} dot={false} />
-                        <Line yAxisId="left" dataKey="completed_orders" type="monotone" stroke="var(--color-completed_orders)" strokeWidth={2} dot={false} />
-                        <Line yAxisId="right" dataKey="revenue" type="monotone" stroke="var(--color-revenue)" strokeWidth={2} dot={false} />
-                    </LineChart>
+                        <Bar yAxisId="left" dataKey="total_orders" fill="var(--color-total_orders)" />
+                        <Bar yAxisId="left" dataKey="completed_orders" fill="var(--color-completed_orders)" />
+                        <Bar yAxisId="right" dataKey="revenue" fill="var(--color-revenue)" />
+                    </BarChart>
                 </ChartContainer>
             </CardContent>
         </Card>
