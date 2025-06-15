@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { BookingsTable } from '@/components/admin/BookingsTable';
 import { DashboardStats } from '@/components/admin/DashboardStats';
 import { ExpensesTable } from '@/components/admin/ExpensesTable';
+import { GalleryManager } from '@/components/admin/GalleryManager';
 
 const AdminPage = () => {
   const { signOut, user } = useAuth();
@@ -26,6 +27,9 @@ const AdminPage = () => {
         </div>
         <div>
             <ExpensesTable />
+        </div>
+        <div>
+            <GalleryManager />
         </div>
       </main>
     </div>

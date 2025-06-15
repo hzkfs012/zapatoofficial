@@ -1,34 +1,32 @@
 
 import React, { useState } from 'react';
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Skeleton } from "@/components/ui/skeleton";
+
+const fetchGalleryItems = async () => {
+    const { data, error } = await supabase
+        .from('gallery_items')
+        .select('*')
+        .order('display_order', { ascending: true, nullsFirst: false })
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Error fetching gallery items', error);
+        throw new Error(error.message);
+    }
+    return data || [];
+};
 
 const Gallery: React.FC = () => {
   const [openImage, setOpenImage] = useState<string | null>(null);
   
-  // Gallery images (before and after photos)
-  const galleryItems = [
-    {
-      before: "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?q=80&w=2071",
-      after: "https://images.unsplash.com/photo-1575537302964-96cd47c06b1b?q=80&w=2070",
-      title: "Air Jordan 1",
-    },
-    {
-      before: "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?q=80&w=2031",
-      after: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070",
-      title: "Nike Air Max",
-    },
-    {
-      before: "https://images.unsplash.com/photo-1600269452121-4f2416e55c28?q=80&w=1965",
-      after: "https://images.unsplash.com/photo-1539185441755-769473a23570?q=80&w=2071",
-      title: "Adidas Superstar",
-    },
-    {
-      before: "https://images.unsplash.com/photo-1536922246289-88c42f957773?q=80&w=2080",
-      after: "https://images.unsplash.com/photo-1539298370800-9d8e34968b31?q=80&w=2070",
-      title: "Vans Old Skool",
-    }
-  ];
-  
+  const { data: galleryItems, isLoading, error } = useQuery({
+    queryKey: ['gallery_items_public'],
+    queryFn: fetchGalleryItems,
+  });
+
   return (
     <section id="gallery" className="py-20 bg-gray-50">
       <div className="container mx-auto px-4 md:px-6">
@@ -40,8 +38,26 @@ const Gallery: React.FC = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {galleryItems.map((item, index) => (
+          {isLoading && Array.from({ length: 4 }).map((_, index) => (
             <div key={index} className="space-y-4">
+              <div className="bg-white p-4 rounded-xl shadow-sm">
+                <Skeleton className="h-6 w-3/4 mb-3" />
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-1/4" />
+                    <Skeleton className="h-48 w-full" />
+                  </div>
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-1/4" />
+                    <Skeleton className="h-48 w-full" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+          {error && <p className="text-red-500 col-span-full text-center">Failed to load gallery.</p>}
+          {!isLoading && !error && galleryItems?.map((item) => (
+            <div key={item.id} className="space-y-4">
               <div className="bg-white p-4 rounded-xl shadow-sm">
                 <h3 className="font-bold text-navy mb-3">{item.title}</h3>
                 
@@ -50,10 +66,10 @@ const Gallery: React.FC = () => {
                     <p className="text-sm font-medium text-gray-500">Before</p>
                     <div 
                       className="h-48 bg-gray-100 rounded-lg overflow-hidden cursor-pointer relative group"
-                      onClick={() => setOpenImage(item.before)}
+                      onClick={() => setOpenImage(item.before_image_url)}
                     >
                       <img 
-                        src={item.before} 
+                        src={item.before_image_url} 
                         alt={`${item.title} before cleaning`} 
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
@@ -67,10 +83,10 @@ const Gallery: React.FC = () => {
                     <p className="text-sm font-medium text-gray-500">After</p>
                     <div 
                       className="h-48 bg-gray-100 rounded-lg overflow-hidden cursor-pointer relative group"
-                      onClick={() => setOpenImage(item.after)}
+                      onClick={() => setOpenImage(item.after_image_url)}
                     >
                       <img 
-                        src={item.after} 
+                        src={item.after_image_url} 
                         alt={`${item.title} after cleaning`} 
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
