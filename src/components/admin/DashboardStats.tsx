@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -6,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DateRangePicker } from '@/components/ui/date-range-picker';
 import { subDays, format } from 'date-fns';
 import { DateRange } from 'react-day-picker';
-import { DailyStatsChart } from './DailyStatsChart';
+import { StatBarChart } from './StatBarChart';
 
 const fetchStatsForDateRange = async (dateRange: DateRange) => {
     if (!dateRange.from) {
@@ -33,7 +32,6 @@ const fetchStatsForDateRange = async (dateRange: DateRange) => {
     return { daily: data || [], totals };
 };
 
-
 export const DashboardStats = () => {
     const [date, setDate] = useState<DateRange | undefined>({
         from: subDays(new Date(), 29),
@@ -47,11 +45,14 @@ export const DashboardStats = () => {
     });
 
     const stats = data?.totals;
-    const dailyData = data?.daily ?? [];
+    const dailyData = (data?.daily ?? []).map(item => ({
+        ...item,
+        revenue: item.revenue / 100, // convert from cents
+    }));
 
     return (
         <div className="space-y-8">
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex flex-wrap items-center gap-4 mb-4">
                 <h2 className="text-xl font-semibold">Dashboard Stats</h2>
                 <DateRangePicker date={date} setDate={setDate} />
             </div>
@@ -81,7 +82,30 @@ export const DashboardStats = () => {
                     </CardContent>
                 </Card>
             </div>
-            <DailyStatsChart data={dailyData} />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <StatBarChart
+                    title="Total Orders"
+                    description="Daily total orders."
+                    data={dailyData}
+                    dataKey="total_orders"
+                    color="hsl(var(--chart-1))"
+                />
+                <StatBarChart
+                    title="Completed Orders"
+                    description="Daily completed orders."
+                    data={dailyData}
+                    dataKey="completed_orders"
+                    color="hsl(var(--chart-2))"
+                />
+                <StatBarChart
+                    title="Revenue"
+                    description="Daily revenue."
+                    data={dailyData}
+                    dataKey="revenue"
+                    color="hsl(var(--chart-3))"
+                    tickFormatter={(value) => `$${value.toLocaleString()}`}
+                />
+            </div>
         </div>
     );
 };
