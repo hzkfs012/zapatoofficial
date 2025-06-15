@@ -103,14 +103,14 @@ export const DashboardStats = () => {
                     description="Daily total vs completed orders."
                     data={dailyData}
                     dataKeys={['total_orders', 'completed_orders']}
-                    colors={['hsl(var(--chart-1))', 'hsl(var(--chart-2))']}
+                    colors={['hsl(var(--chart-1))', '#3b82f6']}
                 />
                 <StatBarChart
                     title="Financials"
                     description="Daily revenue vs expenses."
                     data={dailyData}
                     dataKeys={['revenue', 'expenses']}
-                    colors={['hsl(var(--chart-4))', 'hsl(var(--chart-5))']}
+                    colors={['#3b82f6', 'hsl(var(--destructive))']}
                     tickFormatter={(value) => `₹${value.toLocaleString()}`}
                 />
             </div>
