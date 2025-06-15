@@ -16,7 +16,7 @@ import { EditBookingForm } from './EditBookingForm';
 import { Database } from '@/integrations/supabase/types';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
-import jsPDF from 'jspdf';
+import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { InvoiceTemplate } from './InvoiceTemplate';
 import { Printer } from 'lucide-react';
@@ -77,16 +77,17 @@ export const BookingsTable = () => {
                     const pdfWidth = pdf.internal.pageSize.getWidth();
                     const pdfHeight = pdf.internal.pageSize.getHeight();
                     
-                    const imgProps= pdf.getImageProperties(imgData);
-                    const pdfImageRatio = imgProps.width / imgProps.height;
+                    const canvasWidth = canvas.width;
+                    const canvasHeight = canvas.height;
+                    const canvasImageRatio = canvasWidth / canvasHeight;
                     const pdfPageRatio = pdfWidth / pdfHeight;
 
                     let newWidth = pdfWidth;
-                    let newHeight = newWidth / pdfImageRatio;
-                    
-                    if(pdfImageRatio > pdfPageRatio) {
+                    let newHeight = newWidth / canvasImageRatio;
+
+                    if (canvasImageRatio < pdfPageRatio) { // Image is "taller" than page
                         newHeight = pdfHeight;
-                        newWidth = newHeight * pdfImageRatio;
+                        newWidth = newHeight * canvasImageRatio;
                     }
 
                     pdf.addImage(imgData, 'PNG', 0, 0, newWidth, newHeight);
