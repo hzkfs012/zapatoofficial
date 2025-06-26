@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -36,7 +37,6 @@ const fetchBookings = async (page: number) => {
     if (error) throw new Error(error.message);
     return { data, count };
 };
-
 
 export const BookingsTable = () => {
     const [currentPage, setCurrentPage] = useState(0);
@@ -122,7 +122,7 @@ export const BookingsTable = () => {
                             <TableRow key={booking.id}>
                                 <TableCell>
                                     <div className="font-medium">{booking.name}</div>
-                                    <div className="text-sm text-muted-foreground">{booking.email}</div>
+                                    <div className="text-sm text-muted-foreground">{booking.phone || 'No phone'}</div>
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex flex-wrap gap-1">
