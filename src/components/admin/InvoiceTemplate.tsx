@@ -16,9 +16,10 @@ export const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ booking, invoi
         <div className="flex items-center space-x-4">
             <img src="/icons/brush.svg" alt="Shoe Shine Service Logo" className="h-14 w-14" />
             <div>
-                <h2 className="text-2xl font-semibold">Shoe Shine Service</h2>
-                <p className="text-sm text-gray-600">123 Clean Street, Sparkletown, 110011</p>
-                <p className="text-sm text-gray-600">contact@shoeshine.com</p>
+                <h2 className="text-2xl font-semibold">Zapato Lauderia.co</h2>
+                <p className="text-sm text-gray-600">2nd Floor, Opposit KSEB office</p>
+                <p className="text-sm text-gray-600">Siraj Bypass road, Koduvally</p>
+                <p className="text-sm text-gray-600">zapatolauderiaco@gmail.com</p>
             </div>
         </div>
         <div className="text-right">
